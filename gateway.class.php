@@ -49,9 +49,16 @@ class Gateway {
 			'x_reference' => $this->_basket['cart_order_id'],
 			'x_amount' => $this->_basket['total'],
 			'x_currency' => $GLOBALS['config']->get('config', 'default_currency'),
+			
 			'x_url_callback' => $GLOBALS['storeURL'].'/index.php?_g=remote&type=gateway&cmd=call&module=Oxipay',
 			'x_url_complete' => $GLOBALS['storeURL'].'/index.php?_g=remote&type=gateway&cmd=process&module=Oxipay',
 			'x_url_cancel' => $GLOBALS['storeURL'].'/index.php?_a=checkout',
+			/* Attempted work around (WIP)
+			'x_url_callback' => $GLOBALS['storeURL'].'/modules/gateway/Oxipay/call.php',
+			'x_url_complete' => $GLOBALS['storeURL'].'/modules/gateway/Oxipay/process.php',
+			'x_url_cancel' => $GLOBALS['storeURL'].'/modules/gateway/Oxipay/cancel.php',
+			*/
+
 			'x_shop_country' => getCountryFormat($GLOBALS['config']->get('config', 'store_country'), 'numcode', 'iso'),
 			'x_shop_name' => $GLOBALS['config']->get('config', 'store_name'),
 			'x_test' => $this->_module['testMode'] ? 'true' : 'false',
@@ -102,7 +109,8 @@ class Gateway {
 	}
 
 	public function process() {
-		httpredir(currentPage(array('_g', 'type', 'cmd', 'module'), array('_a' => 'complete')));
+		$path = str_replace('/modules/gateway/Oxipay','',$GLOBALS['rootRel']);
+		httpredir($path.'index.php?_a=complete');
 	}
 
 	##################################################
