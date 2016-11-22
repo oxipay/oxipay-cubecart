@@ -88,7 +88,7 @@ class Gateway {
 		$path = str_replace('/modules/gateway/Oxipay','',$GLOBALS['rootRel']);
 		
 		if($_GET['x_result'] == 'failed') {
-			$GLOBALS['gui']->setError('Payment has been unsuccessful. Please try again or contact us for assitance.');
+			$GLOBALS['gui']->setError('Payment has been unsuccessful. Please try again or contact our staff for assitance.');
 			httpredir($path.'index.php?_a=checkout');
 		} else {
 			httpredir($path.'index.php?_a=complete');

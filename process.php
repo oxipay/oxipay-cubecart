@@ -7,4 +7,4 @@ $params = array(
 );
 require('../../../ini.inc.php');
 $path = str_replace('/modules/gateway/Oxipay','',$GLOBALS['rootRel']);
-header('location: '.$path.'?'.http_build_query(array_merge($params, $_GET)));
+header('location: '.$path.'index.php?'.http_build_query(array_merge($params, $_GET)));
