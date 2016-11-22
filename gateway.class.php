@@ -49,16 +49,9 @@ class Gateway {
 			'x_reference' => $this->_basket['cart_order_id'],
 			'x_amount' => $this->_basket['total'],
 			'x_currency' => $GLOBALS['config']->get('config', 'default_currency'),
-			
-			'x_url_callback' => $GLOBALS['storeURL'].'/index.php?_g=remote&type=gateway&cmd=call&module=Oxipay',
-			'x_url_complete' => $GLOBALS['storeURL'].'/index.php?_g=remote&type=gateway&cmd=process&module=Oxipay',
-			'x_url_cancel' => $GLOBALS['storeURL'].'/index.php?_a=checkout',
-			/* Attempted work around (WIP)
 			'x_url_callback' => $GLOBALS['storeURL'].'/modules/gateway/Oxipay/call.php',
 			'x_url_complete' => $GLOBALS['storeURL'].'/modules/gateway/Oxipay/process.php',
 			'x_url_cancel' => $GLOBALS['storeURL'].'/modules/gateway/Oxipay/cancel.php',
-			*/
-
 			'x_shop_country' => getCountryFormat($GLOBALS['config']->get('config', 'store_country'), 'numcode', 'iso'),
 			'x_shop_name' => $GLOBALS['config']->get('config', 'store_name'),
 			'x_test' => $this->_module['testMode'] ? 'true' : 'false',
@@ -81,36 +74,25 @@ class Gateway {
 			'x_invoice' => $this->_basket['cart_order_id'],
 			'x_description' => 'Payment for order '.$this->_basket['cart_order_id']);
 
-		$hidden['x_signature'] = $this->oxipay_sign($hidden, $this->_module['api_key']);
+		$hidden['x_signature'] = $this->_oxipay_sign($hidden, $this->_module['api_key']);
 			
 		return (isset($hidden)) ? $hidden : false;
 	}
 
 	public function call() {
-		$order				= Order::getInstance();
-		$cart_order_id 		= $this->_basket['x_reference'];
-		$order_summary		= $order->getSummary($cart_order_id);
-		$response_code 		= (string)$_POST['x_result'];
-			
-		if($response_code=='completed'){	
-			$order->orderStatus(Order::ORDER_PROCESS, $cart_order_id);
-			$order->paymentStatus(Order::PAYMENT_SUCCESS, $cart_order_id);
-		}
-
-		$transData['notes']			= 'Test mode: '.$_POST['x_test'];
-		$transData['order_id']		= $cart_order_id;
-		$transData['trans_id']		= $_POST['x_gateway_reference'];
-		$transData['amount']		= $_POST['x_amount'];
-		$transData['extra']			= '';
-		$transData['status']		= ucfirst((string)$_POST['x_result']);
-		$transData['customer_id']	= $order_summary['customer_id'];
-		$transData['gateway']		= $this->_module;
-		$order->logTransaction($transData);
+		$this->_call_or_process();
 	}
 
 	public function process() {
+		$this->_call_or_process();
 		$path = str_replace('/modules/gateway/Oxipay','',$GLOBALS['rootRel']);
-		httpredir($path.'index.php?_a=complete');
+		
+		if($_GET['x_result'] == 'failed') {
+			$GLOBALS['gui']->setError('Payment has been unsuccessful. Please try again or contact us for assitance.');
+			httpredir($path.'index.php?_a=checkout');
+		} else {
+			httpredir($path.'index.php?_a=complete');
+		}
 	}
 
 	##################################################
@@ -119,7 +101,29 @@ class Gateway {
 		return false;
 	}
 
-	function oxipay_sign($query, $api_key)
+	private function _call_or_process() {
+		$order				= Order::getInstance();
+		$cart_order_id 		= $this->_basket['x_reference'];
+		$order_summary		= $order->getSummary($cart_order_id);
+		$response_code 		= (string)$_GET['x_result'];
+			
+		if($response_code == 'completed'){	
+			$order->orderStatus(Order::ORDER_PROCESS, $cart_order_id);
+			$order->paymentStatus(Order::PAYMENT_SUCCESS, $cart_order_id);
+		}
+
+		$transData['notes']			= 'Test mode: '.$_GET['x_test'];
+		$transData['order_id']		= $cart_order_id;
+		$transData['trans_id']		= $_GET['x_gateway_reference'];
+		$transData['amount']		= $_GET['x_amount'];
+		$transData['extra']			= '';
+		$transData['status']		= ucfirst($response_code);
+		$transData['customer_id']	= $order_summary['customer_id'];
+		$transData['gateway']		= $this->_module;
+		$order->logTransaction($transData);
+	}
+
+	private function _oxipay_sign($query, $api_key)
     {
         $clear_text = '';
         ksort($query);
