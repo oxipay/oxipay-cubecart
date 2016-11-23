@@ -5,6 +5,4 @@ $params = array(
 	'cmd' => 'call',
 	'module' => 'Oxipay'
 );
-require('../../../ini.inc.php');
-$path = str_replace('/modules/gateway/Oxipay','',$GLOBALS['rootRel']);
-header('location: '.$path.'index.php?'.http_build_query(array_merge($params, $_GET)));
+require('../../../index.php');

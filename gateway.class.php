@@ -87,7 +87,7 @@ class Gateway {
 		$this->_call_or_process();
 		$path = str_replace('/modules/gateway/Oxipay','',$GLOBALS['rootRel']);
 		
-		if($_GET['x_result'] == 'failed') {
+		if($_REQUEST['x_result'] == 'failed') {
 			$GLOBALS['gui']->setError('Payment has been unsuccessful. Please try again or contact our staff for assitance.');
 			httpredir($path.'index.php?_a=checkout');
 		} else {
@@ -103,28 +103,25 @@ class Gateway {
 
 	private function _call_or_process() {
 		$order				= Order::getInstance();
-		$cart_order_id 		= $this->_basket['x_reference'];
-		$order_summary		= $order->getSummary($cart_order_id);
-		$response_code 		= (string)$_GET['x_result'];
-			
-		if($response_code == 'completed'){	
-			$order->orderStatus(Order::ORDER_PROCESS, $cart_order_id);
-			$order->paymentStatus(Order::PAYMENT_SUCCESS, $cart_order_id);
+		$order_summary		= $order->getSummary($_REQUEST['x_reference']);
+
+		if($_REQUEST['x_result'] == 'completed') {	
+			$order->orderStatus(Order::ORDER_PROCESS, $_REQUEST['x_reference']);
+			$order->paymentStatus(Order::PAYMENT_SUCCESS, $_REQUEST['x_reference']);
 		}
 
-		$transData['notes']			= 'Test mode: '.$_GET['x_test'];
-		$transData['order_id']		= $cart_order_id;
-		$transData['trans_id']		= $_GET['x_gateway_reference'];
-		$transData['amount']		= $_GET['x_amount'];
-		$transData['extra']			= '';
-		$transData['status']		= ucfirst($response_code);
+		$transData['notes']			= 'Test mode: '.$_REQUEST['x_test'];
+		$transData['order_id']		= $this->_basket['x_reference'];
+		$transData['trans_id']		= $_REQUEST['x_gateway_reference'];
+		$transData['amount']		= $_REQUEST['x_amount'];
+		$transData['notes']			= '';
+		$transData['status']		= ucfirst($_REQUEST['x_result']);
 		$transData['customer_id']	= $order_summary['customer_id'];
-		$transData['gateway']		= $this->_module;
+		$transData['gateway']		= 'Oxipay';
 		$order->logTransaction($transData);
 	}
 
-	private function _oxipay_sign($query, $api_key)
-    {
+	private function _oxipay_sign($query, $api_key) {
         $clear_text = '';
         ksort($query);
         foreach ($query as $key => $value) {
