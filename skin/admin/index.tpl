@@ -28,7 +28,7 @@
 				</span>
 			</div>
 			<div><label for="default">{$LANG.common.default}</label><span><input type="hidden" name="module[default]" id="default" class="toggle" value="{$MODULE.default}" /></span></div>
-			<div><label for="description">{$LANG.common.description} *</label><span><input name="module[desc]" id="description" class="textbox" type="text" value="{$MODULE.desc}" /></span></div>
+			<div style="display: none"><label for="description">{$LANG.common.description} *</label><span><input name="module[desc]" id="description" class="textbox" type="hidden" value="modules/gateway/Oxipay/images/payment-note.png" /></span></div>
 			<div><label for="acNo">{$LANG.oxipay.mid}</label><span><input name="module[mid]" id="mid" class="textbox" type="text" value="{$MODULE.mid}" /></span></div>
       <div><label for="acNo">{$LANG.oxipay.api_key}</label><span><input name="module[api_key]" id="api_key" class="textbox" type="text" value="{$MODULE.api_key}" /></span></div>
 			<div>
