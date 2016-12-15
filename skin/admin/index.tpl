@@ -37,10 +37,13 @@
 						<input type="hidden" name="module[testMode]" id="testMode" class="toggle" value="{$MODULE.testMode}" />
     				</span>
     		</div>
+      <div><label for="testURL">{$LANG.oxipay.testURL}</label><span><input name="module[testURL]" id="testURL" class="textbox" type="text" value="{if empty($MODULE.testURL)}https://xpozsecure.certegyezipay.com.au/Checkout?platform=Default{else}{$MODULE.testURL}{/if}" /></span></div>
+      <div><label for="liveURL">{$LANG.oxipay.liveURL}</label><span><input name="module[liveURL]" id="liveURL" class="textbox" type="text" value="{if empty($MODULE.liveURL)}https://secure.oxipay.com.au/Checkout?platform=Default{else}{$MODULE.liveURL}{/if}" /></span></div>
     		</fieldset>
     		
     		<p>{$LANG.module.description_options}</p>
   		</div>
+      
   		{$MODULE_ZONES}
   		<div class="form_control">
 			<input type="submit" name="save" value="{$LANG.common.save}" />

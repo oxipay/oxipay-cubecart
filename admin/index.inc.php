@@ -10,6 +10,12 @@
  * Email:  sales@cubecart.com
  * License:  GPL-3.0 http://opensource.org/licenses/GPL-3.0
  */
+if(empty($_POST['testURL'])) {
+	$_POST['testURL'] = 'https://xpozsecure.certegyezipay.com.au/Checkout?platform=Default';
+}
+if(empty($_POST['liveURL'])) {
+	$_POST['liveURL'] = 'https://secure.oxipay.com.au/Checkout?platform=Default';
+}
 if(!defined('CC_INI_SET')) die('Access Denied');
 $module		= new Module(__FILE__, $_GET['module'], 'admin/index.tpl', true);
 $page_content = $module->display();

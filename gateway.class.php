@@ -21,7 +21,7 @@ class Gateway {
 
 		$this->_module	= $module;
 		$this->_basket =& $GLOBALS['cart']->basket;
-		$this->_url	= $this->_module['testMode'] ? 'https://xpozsecure.certegyezipay.com.au/Checkout?platform=Default' : 'https://secure.oxipay.com.au/Checkout?platform=Default';
+		$this->_url	= $this->_module['testMode'] ? $this->_module['testURL'] : $this->_module['liveURL'];
 	}
 
 	##################################################
