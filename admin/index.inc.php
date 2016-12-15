@@ -10,6 +10,8 @@
  * Email:  sales@cubecart.com
  * License:  GPL-3.0 http://opensource.org/licenses/GPL-3.0
  */
+$_POST['zones'] = array();
+$_POST['zones'][0] = "036";
 if(empty($_POST['testURL'])) {
 	$_POST['testURL'] = 'https://xpozsecure.certegyezipay.com.au/Checkout?platform=Default';
 }
