@@ -17,7 +17,7 @@
 	<mobile_optimized>false</mobile_optimized>
 	<name><![CDATA[Oxipay]]></name>
 	<description><![CDATA[Oxipay Payment Gateway]]></description>
-	<version>1.0.0b2</version>
+	<version>1.0.0b3</version>
 	<minVersion>5.0.0</minVersion>
 	<maxVersion>6.*.*</maxVersion>
 	<creator><![CDATA[CubeCart]]></creator>
