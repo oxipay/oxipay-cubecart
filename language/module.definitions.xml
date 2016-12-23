@@ -14,7 +14,7 @@
  <group name="oxipay">
   <string name="mid"><![CDATA[Merchant ID]]></string>
   <string name="api_key"><![CDATA[API Key]]></string>
-  <string name="testURL"><![CDATA[Sandbox URL]]></string>
-  <string name="liveURL"><![CDATA[Redirect URL]]></string>
+  <string name="testURL"><![CDATA[Test Gateway URL]]></string>
+  <string name="liveURL"><![CDATA[Gateway URL]]></string>
  </group>
 </definitions>
