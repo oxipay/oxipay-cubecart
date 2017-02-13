@@ -1,5 +1,9 @@
+branches:
+  only:
+    - master
+skip_tags: true
 environment:
-  release_name: "oxipay-cubecart-v%appveyor_build_version%.zip"
+  release_name: "oxipay-cubecart_v%appveyor_build_version%.zip"
 build_script:
   - ps: Invoke-Expression "7z a $env:release_name"
 artifacts:
@@ -7,8 +11,8 @@ artifacts:
     name: $(appveyor_build_version)
     type: zip
 deploy:
-  release: $(release_name)
-  description: $(appveyor_build_version)
+  release: v$(appveyor_build_version)
+  description: $(APPVEYOR_REPO_COMMIT_MESSAGE)
   provider: GitHub
   auth_token:
     secure: 0+N+1uQIuKJr2Q4IgGOf8SlaCTcV5jSKdRY8Rg2Js1l0S28lMDz49gW4jpjsi0Uj
@@ -22,7 +26,6 @@ notifications:
   - provider: Email
     to:
       - devadmin@certegy.com.au
-      - ryan.bartsch@certegy.com.au
   - provider: Slack
     auth_token:
       secure: yXpzER0fyDmh7wYR6zrrES+wGzz5010OpUvpb5UPMsQZO12Ag3TaeOjSsZ0tDQQ4WaNoNngsPOPiaYWmsfg3fhJrSyPy240FqSwDdhSPqC0=
