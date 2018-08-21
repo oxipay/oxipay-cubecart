@@ -126,7 +126,7 @@ class Gateway {
         ksort($query);
         foreach ($query as $key => $value) {
             if (substr($key, 0, 2) === "x_") {
-                $clear_text .= $key . $value;
+                $clear_text .= $key . htmlspecialchars_decode($value, ENT_QUOTES);
             }
         }
         $hash = hash_hmac( "sha256", $clear_text, $api_key);
